@@ -37,7 +37,9 @@ php artisan test
 php artisan migrate:fresh --seed
 ```
 
-5. Generate the API documentation
+5. (OPTIONAL) Generate the API documentation
+
+Has already been run and included in the repo, but can be run again anyway. Can be useful to run again if any changes made to the .env variables.
 
 ```bash
 php artisan scribe:generate
