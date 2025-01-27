@@ -57,9 +57,6 @@ jobs:
           echo "DB_USERNAME=user" >> .env
           echo "DB_PASSWORD=password" >> .env
 
-      - name: What environment are we working on
-        run: php artisan env:echo APP_ENV
-
       - name: Run tests and capture output
         id: run_tests
         env:
