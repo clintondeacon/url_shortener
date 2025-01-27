@@ -1,0 +1,110 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/localhost:8000"
+        }
+    ],
+    "info": {
+        "name": "Laravel",
+        "_postman_id": "db853e3e-4e5e-439b-8c87-8a4967d8473d",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "\/encode",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "encode",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/encode"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"url\":\"https:\\\/\\\/example.com\"}"
+                        },
+                        "description": "Encode a URL into a shortened version.\n\nThis endpoint takes a long URL and returns a shortened version.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"original_url\": \"https:\/\/example.com\",\n    \"shortened_url\": \"abc123\",\n  }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "\/decode",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "decode",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/decode"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"url\":\"abc123\"}"
+                        },
+                        "description": "Decode a shortened URL back to its original version.\n\nThis endpoint takes a shortened URL and returns the original URL.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"success\": true,\n  \"shortened_url\": \"abc123\",\n  \"data\": {\n    \"id\": 1,\n    \"original_url\": \"https:\/\/example.com\",\n    \"shortened_url\": \"abc123\",\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n  \"success\": false,\n  \"shortened_url\": \"abc123\",\n  \"message\": \"Shortened URL could not be found.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "noauth"
+    }
+}

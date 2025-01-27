@@ -1,0 +1,72 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - '**'
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest --no-interaction --optimize-autoloader -q
+
+      - name: Copy .env.testing to .env
+        run: cp .env.testing .env
+
+      - name: Clear config cache
+        run: php artisan config:clear
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Set environment variables for MySQL
+        run: |
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=laravel" >> .env
+          echo "DB_USERNAME=user" >> .env
+          echo "DB_PASSWORD=password" >> .env
+
+      - name: What environment are we working on
+        run: php artisan env:echo APP_ENV
+
+      - name: Run tests and capture output
+        id: run_tests
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel
+          DB_USERNAME: user
+          DB_PASSWORD: password
+        run: php artisan test --env=testing

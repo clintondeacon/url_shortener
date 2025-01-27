@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: Laravel
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8000'
+paths:
+  /encode:
+    post:
+      summary: /encode
+      operationId: encode
+      description: "Encode a URL into a shortened version.\n\nThis endpoint takes a long URL and returns a shortened version."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"original_url\": \"https://example.com\",\n    \"shortened_url\": \"abc123\",\n  }\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: 'The original URL to be shortened.'
+                  example: 'https://example.com'
+                  nullable: false
+              required:
+                - url
+      security: []
+  /decode:
+    post:
+      summary: /decode
+      operationId: decode
+      description: "Decode a shortened URL back to its original version.\n\nThis endpoint takes a shortened URL and returns the original URL."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n  \"success\": true,\n  \"shortened_url\": \"abc123\",\n  \"data\": {\n    \"id\": 1,\n    \"original_url\": \"https://example.com\",\n    \"shortened_url\": \"abc123\",\n  }\n}"
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  shortened_url: abc123
+                  message: 'Shortened URL could not be found.'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  shortened_url:
+                    type: string
+                    example: abc123
+                  message:
+                    type: string
+                    example: 'Shortened URL could not be found.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: 'The shortened URL to be decoded.'
+                  example: abc123
+                  nullable: false
+              required:
+                - url
+      security: []
+tags:
+  -
+    name: Endpoints
+    description: ''
