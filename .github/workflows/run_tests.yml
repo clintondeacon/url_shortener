@@ -37,7 +37,7 @@ jobs:
           php-version: '8.3'
 
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest --no-interaction --optimize-autoloader -q
+        run: composer install -q
 
       - name: Copy .env.testing to .env
         run: cp .env.testing .env
