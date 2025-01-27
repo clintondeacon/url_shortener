@@ -19,10 +19,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UrlShorteningService::class, function ($app) {
             return new UrlShorteningService();
         });
-
-        RateLimiter::for('api', function ($request) {
-            return Limit::perSecond(10)->by($request->ip());
-        });
     }
 
     /**
@@ -31,5 +27,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         ShortenedUrl::observe(ShortenedUrlObserver::class);
+
+        RateLimiter::for('api', function ($request) {
+            return Limit::perSecond(10)->by($request->ip());
+        });
     }
 }
